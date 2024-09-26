@@ -5,6 +5,7 @@ function preload(){
     right = loadImage('right.png');
     up = loadImage('up.png');
     down = loadImage('down.png');
+   let ax;
 }
 
 function setup(){
@@ -18,7 +19,7 @@ function setup(){
     let bx,by,bw,bn;
     let bh=bBarH/2.1;
     let ux,dx,lx,rx;
-    let ax=0;
+     ax=0;
     let aw=bh;
     
     
@@ -76,13 +77,17 @@ function draw(){
     aw = bh;
    
   
-    
+    left.resize(aw, aw);
+    right.resize(aw, aw);
+    up.resize(aw, aw);
+    down.resize(aw, aw);
     
     
 }
 
 function windowResized() { 
     resizeCanvas(windowWidth, windowHeight); 
+  
 }
 
 function mousePressed(){
@@ -91,20 +96,23 @@ function mousePressed(){
         if(mouseX>ux &&mouseX<ux+bw){
             //up
             print('up pressed');
-            image(up, ax, by);
+            image(up, ax, bBarH/2);
             ax+=aw;
         }else if(mouseX>lx &&mouseX<lx+bw){
             //left
             print('left pressed');
+             image(left, ax, bBarH/2);
             ax+=aw;
         }else if(mouseX>dx &&mouseX<dx+bw){
             //down
             print('down pressed');
+             image(down, ax, bBarH/2);
             ax+=aw;
         }else if(mouseX>rx &&mouseX<rx+bw){
             //right
             print('right pressed');
-            ax+=aw;
+             image(right, ax, bBarH/2);
+           ax+=aw;
         }
     }
 }
