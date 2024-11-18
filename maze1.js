@@ -22,6 +22,8 @@ let my;
     let go = false; 
     let index = 0;
     let i;
+    let wall=false;
+let x1, y1,x2,y2,x3,y3=0;
 
 function preload(){
     left = loadImage('left.png');
@@ -55,7 +57,8 @@ function draw(){
     
   
      ss=totalSquareW/5;
-    
+   
+    fill('#C5B3AA');
     for(let i =0; i<5; i++){
         sx=i*ss;
         for(let j = 0; j<5; j++){
@@ -63,6 +66,22 @@ function draw(){
             square(sx,sy,ss);
         }
     }
+    
+     if(wall==false){
+       x1=int(random(5));
+       y1=int(random(5));
+       x2=int(random(5));
+       y2=int(random(5));
+       x3=int(random(5));
+       y3=int(random(5));
+       
+       wall = true;
+     }
+       fill('#A39587');
+       square(x1*ss,y1*ss+bBarH,ss);
+       square(x2*ss,y2*ss+bBarH,ss);
+       square(x3*ss,y3*ss+bBarH,ss);
+    
 //buttonbar
     bn=5;
     by=0;
@@ -108,11 +127,13 @@ function draw(){
     if(go==true){
         if(frameCount%30==0 &&index<order.length){
               mover();
+            
         }
     }
     ellipseMode(CORNER);
     ellipse(mx,my,ms,ms);
     print(mx + " y: "+my);
+    
     
 }
 
@@ -156,25 +177,27 @@ function mousePressed(){
 }
 
 function mover(){
-   let  i=order[index,index+1];
-    print("i="+i);
+    print("order="+order);
+   let  i=order.substring(index,index+1);
+    print("index="+index);
+    print("i= "+i);
     print(mx+' y:'+my);
     if(i=='1'){
           for(let n = 0; n<ss; n+=myv){
              my-=myv;  
             //  ellipse(mx,my,ms,ms);
           } 
-        }else if(order[index,index+1]=='2'){
+        }else if(i=='2'){
             for(let n = 0; n<ss;n+=mxv){
               mx-=mxv;
           //      ellipse(mx,my,ms,ms);
           }    
-        }else if(order[index,index+1]=='3'){
+        }else if(i=='3'){
           for(let n = 0; n<ss;n+=myv){
             my+=myv;
               //ellipse(mx,my,ms,ms);
           }   
-        }else if(order[index,index+1]=='4'){
+        }else if(i=='4'){
             for(let n = 0; n<ss;n+=mxv){
              mx+=mxv;
               //  ellipse(mx,my,ms,ms);
@@ -182,6 +205,8 @@ function mover(){
         }
     if(index<order.length){
     index++;
+    }else{
+        go=false;
     }
     }
 
