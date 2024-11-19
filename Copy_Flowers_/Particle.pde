@@ -41,6 +41,17 @@ class Particle {
   
   Particle() {
     initialize();
+    r = int(random(3));
+    if (r==0) {
+      flower= particleFlower1;
+    } else if (r==1) {
+      flower= particleFlower2;
+    } else {
+      flower= particleFlower3;
+    }
+    if (flower == null) {
+    println("Error: Particle flower image is null!");
+  }
 
     //assign initial values based on parameters passed into constructor
     position = new PVector(random(width), 0);
@@ -60,6 +71,9 @@ class Particle {
       particleFlower2= loadImage("flower2.png");
       particleFlower3= loadImage("flower3.png");
     }
+    if (particleFlower1 == null || particleFlower2 == null || particleFlower3 == null) {
+  println("Error: One or more flower images are missing!");
+}
   }
     //function to check if particle is dead
     boolean isDead() {

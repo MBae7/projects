@@ -32,10 +32,10 @@ void setup() {
   systems = new ArrayList<ParticleSystem>();
   particles = new ArrayList<Particle>();
 
-  for (int i = 0; i < 40; i++) {
+  for (int i = 0; i < 5; i++) {
       Particle p = new Particle();
       particles.add(p);
-    }
+}
   ps = new ParticleSystem(width/2, height/2);
   systems.add(ps);
  
