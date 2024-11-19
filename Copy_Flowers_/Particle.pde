@@ -36,7 +36,7 @@ class Particle {
     radius = 20;
     flower.resize(int(radius*2), int(radius*2));
     mass = 1;
-    lifeSpan = 255;
+    lifeSpan = 400;
   }
 
   Particle() {
@@ -168,7 +168,7 @@ class Particle {
       position.x = random(width);
       lifeSpan = 1000;
       println(mass);
-      velocity.y = 2;
+      velocity.y = 1.5;
     }
 
     //add acceleration to velocity
