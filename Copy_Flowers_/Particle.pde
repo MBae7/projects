@@ -17,7 +17,7 @@ class Particle {
 
 
   //Constructor Function
-  /*Particle(PVector pIn, PVector vIn) {
+  Particle(PVector pIn, PVector vIn) {
     initialize();
     r = int(random(3));
     if (r==0) {
@@ -37,14 +37,14 @@ class Particle {
     flower.resize(int(radius*2), int(radius*2));
     mass = 1;
     lifeSpan = 255;
-  }*/
+  }
   
-  Particle(PVector pIn, PVector vIn, float radius) {
+  Particle() {
     initialize();
 
     //assign initial values based on parameters passed into constructor
-    position = new PVector(pIn.x, pIn.y);
-    velocity = new PVector(vIn.x, vIn.y);
+    position = new PVector(random(width), 0);
+    velocity = new PVector(0, 2);
     acceleration = new PVector(0, 0);
     topSpeed = 10;
     radius = 20;

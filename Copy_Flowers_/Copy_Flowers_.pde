@@ -4,25 +4,25 @@ PImage corner1;
 PImage corner2;
 
 
+
 ArrayList<Particle> particles;
 ArrayList<ParticleSystem> systems;
 PVector gravity;
 PVector wind;
 ParticleSystem ps;
-Particle fall;
 AudioIn in;
 BeatDetector beatDetector;
 SoundFile song;
 
 void setup() {
- 
+ fullScreen();
   corner1 = loadImage("corner1.png");
   corner1.resize(int(width/2.5), (int(height/3)));
   corner2 = loadImage("corner2.png");
   corner2.resize(int(width/2.5), (int(height/3)));
   
   
-  fullScreen();
+  
   song = new SoundFile(this, "song.mp3");
   song.play();
 
@@ -32,11 +32,13 @@ void setup() {
   systems = new ArrayList<ParticleSystem>();
   particles = new ArrayList<Particle>();
 
+  for (int i = 0; i < 40; i++) {
+      Particle p = new Particle();
+      particles.add(p);
+    }
   ps = new ParticleSystem(width/2, height/2);
   systems.add(ps);
-  
-  fall = new Particle(width/2, height/2,4.5);
-  particles.add(fall);
+ 
 
   beatDetector = new BeatDetector(this);
   in = new AudioIn(this);
