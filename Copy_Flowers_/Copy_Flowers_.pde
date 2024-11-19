@@ -15,14 +15,14 @@ BeatDetector beatDetector;
 SoundFile song;
 
 void setup() {
- fullScreen();
+  fullScreen();
   corner1 = loadImage("corner1.png");
   corner1.resize(int(width/2.5), (int(height/3)));
   corner2 = loadImage("corner2.png");
   corner2.resize(int(width/2.5), (int(height/3)));
-  
-  
-  
+
+
+
   song = new SoundFile(this, "song.mp3");
   song.play();
 
@@ -32,13 +32,13 @@ void setup() {
   systems = new ArrayList<ParticleSystem>();
   particles = new ArrayList<Particle>();
 
-  for (int i = 0; i < 5; i++) {
-      Particle p = new Particle();
-      particles.add(p);
-}
+  for (int i = 0; i < 15; i++) {
+    Particle p = new Particle();
+    particles.add(p);
+  }
   ps = new ParticleSystem(width/2, height/2);
   systems.add(ps);
- 
+
 
   beatDetector = new BeatDetector(this);
   in = new AudioIn(this);
@@ -48,13 +48,20 @@ void setup() {
 
 void draw() {
   background(0);
-   imageMode(CORNER);
+  imageMode(CORNER);
   tint(255, 255);
-  image(corner1,0,0);
-  image(corner2,width-corner2.width,0);
+  image(corner1, 0, 0);
+  image(corner2, width-corner2.width, 0);
 
   for (ParticleSystem system : systems) {
     system.run();
+  }
+
+  for (Particle p : particles) {
+      p.applyGravity(gravity);
+      p.fall();
+      //p.checkEdgesBounce();
+      p.display();
   }
 
   if (beatDetector.isBeat()) {

@@ -7,7 +7,7 @@ class ParticleSystem {
     particles = new ArrayList<Particle>();
     position = new PVector(x, y);
     //populate the arraylist with particles using a for loop
-    for (int i = 0; i < 40; i++) {
+    for (int i = 0; i < 30; i++) {
       PVector p = PVector.random2D();
       p.mult(random(1, 2));
       Particle particle = new Particle(position, p);
