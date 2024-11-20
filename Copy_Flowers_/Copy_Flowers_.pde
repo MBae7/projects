@@ -45,6 +45,7 @@ void setup() {
   beatDetector.input(song);
   //beatDetector.input(in);
   beatDetector.sensitivity(250);
+  //hi
 }
 
 void draw() {
