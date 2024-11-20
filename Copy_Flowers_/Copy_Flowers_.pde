@@ -43,6 +43,7 @@ void setup() {
   beatDetector = new BeatDetector(this);
   in = new AudioIn(this);
   beatDetector.input(song);
+  //beatDetector.input(in);
   beatDetector.sensitivity(250);
 }
 
