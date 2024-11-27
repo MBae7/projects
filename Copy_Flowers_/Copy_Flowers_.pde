@@ -3,7 +3,7 @@ import processing.sound.*;
 PImage corner1;
 PImage corner2;
 
-
+boolean falling;
 
 ArrayList<Particle> particles;
 ArrayList<ParticleSystem> systems;
@@ -45,34 +45,39 @@ void setup() {
   beatDetector.input(song);
   //beatDetector.input(in);
   beatDetector.sensitivity(250);
-  //hi
+
+  falling = false;
 }
 
 void draw() {
   background(0);
-  imageMode(CORNER);
-  tint(255, 255);
-  image(corner1, 0, 0);
-  image(corner2, width-corner2.width, 0);
+
 
   for (ParticleSystem system : systems) {
     system.run();
   }
 
   for (Particle p : particles) {
+    if (falling == true) {
       p.applyGravity(gravity);
       p.fall();
-      //p.checkEdgesBounce();
       p.display();
+    }
   }
 
-  if (beatDetector.isBeat()) {
+  /*if (beatDetector.isBeat()) {
     ParticleSystem newSystem = new ParticleSystem(int(random(width)), int(random(height)));
     systems.add(newSystem);
-  }
+  }*/
 
   //fluid.display();
   //solid.display();
+
+  imageMode(CORNER);
+  //tint(255,255);
+  tint(247, 155, 187, 255);
+  image(corner1, 0, 0);
+  image(corner2, width-corner2.width, 0);
 }
 
 void mouseClicked() {
@@ -85,7 +90,13 @@ void keyPressed() {
     wind = new PVector(0.05, 0);
   } else if (keyCode == LEFT) {
     wind = new PVector(-0.05, 0);
+  } else if (key == 'q') {
+    falling = true;
+  } else if (key == ' '){
+    ParticleSystem newSystem = new ParticleSystem(int(random(width)), int(random(height)));
+  systems.add(newSystem);
   }
+    
 }
 
 void keyReleased() {

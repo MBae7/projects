@@ -155,7 +155,7 @@ class Particle {
     translate(position.x, position.y);
     rotate(angle);
     imageMode(CENTER);
-    tint(255, lifeSpan);
+    tint(247, 155, 187, lifeSpan);
     image(flower, 0, 0);
 
     popMatrix();
