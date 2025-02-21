@@ -35,13 +35,8 @@ PImage[] outputs;
 int colorToChange = -1;
 
 void setup() {
- // video = new Capture(this, "pipeline:autovideosrc");
- video = new Capture(this, 640, 480); 
-//  video = new Capture(this, "default");
-
-  
- opencv = new OpenCV(this, 640, 480); // Match the dimensions used in the test code
-
+  video = new Capture(this, "pipeline:autovideosrc");
+  opencv = new OpenCV(this, video.width, video.height);
   contours = new ArrayList<Contour>();
   
   size(830, 480, P2D);
@@ -62,8 +57,6 @@ void draw() {
   if (video.available()) {
     video.read();
   }
-  image(video, 0, 0);
-
 
   // <2> Load the new frame of our movie in to OpenCV
   opencv.loadImage(video);
