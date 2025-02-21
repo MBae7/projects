@@ -1,3 +1,13 @@
+//notes for mia:
+/*
+falling flowers can wait until she starts dancing to actually go
+  i changed this so that it starts when you press q but feel free to change it to whatever
+flowers more hot pink
+ms rothschild is thinking that the bursts of petals can go when the fans open (either with key press or sound recognition)
+color of fans more like (232, 52, 151)
+
+*/
+
 import processing.sound.*;
 
 PImage corner1;
