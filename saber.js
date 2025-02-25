@@ -44,7 +44,7 @@ function draw() {
         if (mouseIsPressed &&
             mouseX > 0 && mouseX < width &&
             mouseY > 0 && mouseY < height) {
-            targetColor = capture.get(mouseX, mouseY);
+            targetColor = capture.get(map(mouseX,0,width,width,0), mouseY);
             sampling = true;
         }
 
@@ -86,15 +86,20 @@ function draw() {
         capture.updatePixels();
     }
 
-    image(capture, 0, 0, w, h);
+     push();
+    translate(width,0);
+  scale(-1, 1);
+   image(capture, 0, 0, w, h);
+  pop();
+   
 
     noStroke();
     fill(targetColor);
     rect(20, 20, 40, 40);
 
-    ellipse(sumPosition.x, sumPosition.y, 8, 8);
+    /*ellipse(sumPosition.x, sumPosition.y, 8, 8);
     noFill();
     stroke(targetColor);
     strokeWeight(8);
-    drawTrail(sumPosition);
+    drawTrail(sumPosition);*/
 }
