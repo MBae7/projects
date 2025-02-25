@@ -18,6 +18,7 @@ function setup() {
     capture.size(w, h);
     createCanvas(w, h);
     capture.hide();
+    colorMode(HSB, 100)
 }
 
 var trailPointsLength = 100;
