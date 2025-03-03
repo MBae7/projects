@@ -3,8 +3,29 @@
 var capture;
 var w = 640;
 var h = 480;
+let cameraPos;
+let cameraCenter;
+let boxes;
+let buffers;
+let texture, tree1, tree2, tree3, treeReal1, treeReal2, treeReal3, leaves;
+
+function preload() {
+  texture =  loadImage("TreeTexture.png");
+    
+    tree1 = loadImage("Tree1.png");
+  tree2 = loadImage("Tree2.png");
+  tree3 = loadImage("Tree3.png");
+  
+  treeReal1 = loadImage("treeReal1.png");
+  treeReal2 = loadImage("treeReal2.png");
+  treeReal3 = loadImage("treeReal3.png");
+    
+    leaves = loadImage("Leaves.png");
+}
 
 function setup() {
+    cameraPos = createVector(0,0,0);
+    cameraCenter = createVector(0, 0, 0)
     capture = createCapture({
         audio: false,
         video: {
@@ -103,4 +124,6 @@ function draw() {
     stroke(targetColor);
     strokeWeight(8);
     drawTrail(sumPosition);*/
+    
+    
 }
