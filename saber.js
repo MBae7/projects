@@ -5,9 +5,10 @@ var w = 640;
 var h = 480;
 let cameraPos;
 let cameraCenter;
-let boxes;
+let boxes = [];
 let buffers;
 let red, blue;
+let pg; 
 
 function preload() {
   red =  loadImage("red.png");
@@ -17,6 +18,10 @@ function preload() {
 function setup() {
     cameraPos = createVector(0,0,0);
     cameraCenter = createVector(0, 0, 0)
+    
+    append(boxes, createVector(cameraCenter.x, cameraCenter.y, cameraCenter.z));
+  
+    
     capture = createCapture({
         audio: false,
         video: {
