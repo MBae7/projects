@@ -53,6 +53,8 @@ function drawTrail(nextPoint) {
 }
 
 var targetColor = [255, 255, 255];
+
+
 function draw() {
     capture.loadPixels();
     var sampling = false;
@@ -121,5 +123,51 @@ function draw() {
     strokeWeight(8);
     drawTrail(sumPosition);*/
     
+    let speed = 0.001;
+    let fourthDist = cameraCenter.dist(cameraPos) / 4.0;
+    /*
+    for(let i = boxes.size()-1; i >= 0; i--){
+    let boxPos =   createVector(boxes.get(i));
     
+    boxPos = lerp(boxPos, cameraPos, speed);
+    boxes.set(i, boxPos);
+    
+    //float c = map(i,boxes.size(),0,0,255);
+    let c = map(boxPos.x, cameraCenter.x, cameraPos.x-100, 0,255);
+    tint(c);
+    
+    drawBox(boxPos);
+    
+    if (i == boxes.size() - 1 && boxPos.dist(cameraCenter) >= fourthDist) {
+      boxes.add(createVector(cameraCenter.x, cameraCenter.y, cameraCenter.z));
+     // PGraphics pg = createGraphics(width/3,height/3);
+     // buffers.add(pg);
+      
+     // drawTrees(pg);
+    }
+    
+    if (boxPos.dist(cameraPos) < 100) {
+      boxes.remove(i);
+    }
+    
+    
+  }
+  */
+    
+}
+
+function drawBox(pos){
+   noStroke(); 
+   let w = width/1.2;
+   let h = height;
+    
+  pushMatrix();
+  translate(pos.x,pos.y,pos.z);
+    
+  beginShape();
+  vertex(0, -h, -w/2, 0, 0);
+  vertex(0, -h, w/2, 1, 0);
+  vertex(0, h/2, w/2, 1, 1);
+  vertex(0, h/2, -w/2, 0, 1);
+  endShape(CLOSE);
 }
