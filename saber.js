@@ -125,26 +125,35 @@ function draw() {
     
     let speed = 0.001;
     let fourthDist = cameraCenter.dist(cameraPos) / 4.0;
-    /*
-    for(let i = boxes.size()-1; i >= 0; i--){
-    let boxPos =   createVector(boxes.get(i));
     
-    boxPos = lerp(boxPos, cameraPos, speed);
-    boxes.set(i, boxPos);
+    for(let i = boxes.length-1; i >= 0; i--){
+        let boxPos =   createVector(boxes[i]);
+
+        
+
+    
+        boxPos = p5.Vector.lerp(boxPos, cameraPos, speed);
+        boxes[i]= boxPos;
+        
+  
     
     //float c = map(i,boxes.size(),0,0,255);
     let c = map(boxPos.x, cameraCenter.x, cameraPos.x-100, 0,255);
     tint(c);
     
     drawBox(boxPos);
-    
-    if (i == boxes.size() - 1 && boxPos.dist(cameraCenter) >= fourthDist) {
+       
+    let d = boxPos.dist(cameraCenter);
+    if (i == boxes.length - 1 && d >= fourthDist) {
       boxes.add(createVector(cameraCenter.x, cameraCenter.y, cameraCenter.z));
      // PGraphics pg = createGraphics(width/3,height/3);
      // buffers.add(pg);
       
      // drawTrees(pg);
     }
+        
+    }
+    /*
     
     if (boxPos.dist(cameraPos) < 100) {
       boxes.remove(i);
@@ -161,7 +170,7 @@ function drawBox(pos){
    let w = width/1.2;
    let h = height;
     
-  pushMatrix();
+  push();
   translate(pos.x,pos.y,pos.z);
     
   beginShape();
