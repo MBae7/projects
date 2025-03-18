@@ -33,7 +33,7 @@ function setup() {
     });
     capture.elt.setAttribute('playsinline', '');
     capture.size(w, h);
-    createCanvas(w, h);
+    createCanvas(w, h, WEBGL);
     capture.hide();
     colorMode(HSB, 100)
 }
@@ -125,15 +125,17 @@ function draw() {
     
     let speed = 0.001;
     let fourthDist = cameraCenter.dist(cameraPos) / 4.0;
+     let boxPos =   createVector(w/4,h/4);
+        drawBox(boxPos);
     
-    for(let i = boxes.length-1; i >= 0; i--){
+   /* for(let i = boxes.length-1; i >= 0; i--){
         let boxPos =   createVector(boxes[i]);
 
         
 
     
         boxPos = p5.Vector.lerp(boxPos, cameraPos, speed);
-        boxes[i]= boxPos;
+        boxes[i]= boxPos; 
         
   
     
@@ -152,31 +154,36 @@ function draw() {
      // drawTrees(pg);
     }
         
-    }
-    /*
+    
+    
     
     if (boxPos.dist(cameraPos) < 100) {
       boxes.remove(i);
     }
     
     
-  }
-  */
+  }*/
+  
     
 }
 
 function drawBox(pos){
-   noStroke(); 
+   //noStroke(); 
    let w = width/1.2;
    let h = height;
     
   push();
   translate(pos.x,pos.y,pos.z);
     
-  beginShape();
-  vertex(0, -h, -w/2, 0, 0);
-  vertex(0, -h, w/2, 1, 0);
+    stroke(255);
+    fill(255);
+  box(30, 50, 10);
+
+  /*beginShape();
+  vertex(0, h, -w/2, 0, 0);
+  vertex(0, h, w/2, 1, 0);
   vertex(0, h/2, w/2, 1, 1);
   vertex(0, h/2, -w/2, 0, 1);
   endShape(CLOSE);
+  */
 }
