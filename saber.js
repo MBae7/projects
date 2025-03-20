@@ -125,7 +125,7 @@ function draw() {
     
     let speed = 0.001;
     let fourthDist = cameraCenter.dist(cameraPos) / 4.0;
-     let boxPos =   createVector(w/4,h/4);
+     let boxPos =   createVector(w/4,h/4,100);
         drawBox(boxPos);
     
    /* for(let i = boxes.length-1; i >= 0; i--){
@@ -171,6 +171,8 @@ function drawBox(pos){
    //noStroke(); 
    let w = width/1.2;
    let h = height;
+     orbitControl();
+
     
   push();
   translate(pos.x,pos.y,pos.z);
