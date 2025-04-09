@@ -9,6 +9,7 @@ let boxes = [];
 let buffers;
 let red, blue;
 let pg; 
+let z = 10;
 
 function preload() {
   red =  loadImage("red.png");
@@ -16,8 +17,8 @@ function preload() {
 }
 
 function setup() {
-    cameraPos = createVector(0,0,0);
-    cameraCenter = createVector(0, 0, 0)
+    cameraPos = createVector(w/2,h/2,0);
+    cameraCenter = createVector(w/2, h/2, 0)
     
     append(boxes, createVector(cameraCenter.x, cameraCenter.y, cameraCenter.z));
   
@@ -56,18 +57,14 @@ var targetColor = [255, 255, 255];
 
 
 function draw() {
+    background(0);
     capture.loadPixels();
     var sampling = false;
     var sumPosition = createVector(0, 0);
     if (capture.pixels.length > 0) { // don't forget this!
 
-        if (mouseIsPressed &&
-            mouseX > 0 && mouseX < width &&
-            mouseY > 0 && mouseY < height) {
-            targetColor = capture.get(map(mouseX,0,width,width,0), mouseY);
-            sampling = true;
-        }
-
+        keyPressed();
+        
         var w = capture.width,
             h = capture.height;
         var i = 0;
@@ -109,7 +106,7 @@ function draw() {
      push();
     translate(width,0);
   scale(-1, 1);
-   image(capture, 0, 0, w, h);
+//   image(capture, 0, 0, w, h);
   pop();
    
 
@@ -125,7 +122,8 @@ function draw() {
     
     let speed = 0.001;
     let fourthDist = cameraCenter.dist(cameraPos) / 4.0;
-     let boxPos =   createVector(w/4,h/4,100);
+     let boxPos =   createVector(w/4,h/4,z);
+        z+=1;
         drawBox(boxPos);
     
    /* for(let i = boxes.length-1; i >= 0; i--){
@@ -167,15 +165,26 @@ function draw() {
     
 }
 
+function keyPressed(){
+    if(key === ' '&& keyIsPressed){
+        if (mouseX > 0 && mouseX < width &&
+            mouseY > 0 && mouseY < height) {
+            targetColor = capture.get(map(mouseX,0,width,width,0), mouseY);
+            sampling = true;
+        }
+    }
+}
+
 function drawBox(pos){
    //noStroke(); 
    let w = width/1.2;
    let h = height;
      orbitControl();
 
-    
+
   push();
   translate(pos.x,pos.y,pos.z);
+ 
     
     stroke(255);
     fill(255);
