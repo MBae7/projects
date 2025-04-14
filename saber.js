@@ -37,6 +37,8 @@ function setup() {
     createCanvas(w, h, WEBGL);
     capture.hide();
     colorMode(HSB, 100)
+    
+    for 
 }
 
 var trailPointsLength = 100;
@@ -57,7 +59,10 @@ var targetColor = [255, 255, 255];
 
 
 function draw() {
-    background(0);
+   background(0);
+    
+    push();
+    
     capture.loadPixels();
     var sampling = false;
     var sumPosition = createVector(0, 0);
@@ -103,17 +108,20 @@ function draw() {
         capture.updatePixels();
     }
 
+    
      push();
     translate(width,0);
   scale(-1, 1);
 //   image(capture, 0, 0, w, h);
+
   pop();
    
 
     noStroke();
     fill(targetColor);
     rect(20, 20, 40, 40);
-
+    
+pop;
     /*ellipse(sumPosition.x, sumPosition.y, 8, 8);
     noFill();
     stroke(targetColor);
@@ -122,17 +130,13 @@ function draw() {
     
     let speed = 0.001;
     let fourthDist = cameraCenter.dist(cameraPos) / 4.0;
-     let boxPos =   createVector(w/4,h/4,z);
-        z+=1;
-        drawBox(boxPos);
+   
     
-   /* for(let i = boxes.length-1; i >= 0; i--){
+ for(let i = boxes.length-1; i >= 0; i--){
         let boxPos =   createVector(boxes[i]);
+      let boxPosition =   createVector(random(w),random(h),z);
 
-        
-
-    
-        boxPos = p5.Vector.lerp(boxPos, cameraPos, speed);
+        boxPos = p5.Vector.lerp(boxPosition, cameraPos, speed);
         boxes[i]= boxPos; 
         
   
@@ -141,9 +145,10 @@ function draw() {
     let c = map(boxPos.x, cameraCenter.x, cameraPos.x-100, 0,255);
     tint(c);
     
-    drawBox(boxPos);
+    //drawBox(boxPos);
+     orbitControl();
        
-    let d = boxPos.dist(cameraCenter);
+ /*  let d = boxPos.dist(cameraCenter);
     if (i == boxes.length - 1 && d >= fourthDist) {
       boxes.add(createVector(cameraCenter.x, cameraCenter.y, cameraCenter.z));
      // PGraphics pg = createGraphics(width/3,height/3);
@@ -154,13 +159,13 @@ function draw() {
         
     
     
-    
+   */  
     if (boxPos.dist(cameraPos) < 100) {
       boxes.remove(i);
     }
     
-    
-  }*/
+  
+ } 
   
     
 }
@@ -176,7 +181,7 @@ function keyPressed(){
 }
 
 function drawBox(pos){
-   //noStroke(); 
+
    let w = width/1.2;
    let h = height;
      orbitControl();
@@ -198,3 +203,23 @@ function drawBox(pos){
   endShape(CLOSE);
   */
 }
+
+class Box {
+  constructor(x, y, z) {  
+    this.x = x;
+    this.y = y;
+    this.z = z;
+  }
+    
+  display(){
+    stroke(255);
+    fill(255);
+    box(this.x, this.y, this.z);
+  }
+    
+  move(){
+     z+=1;
+  }
+  
+}
+    
