@@ -9,7 +9,7 @@ let boxes = [];
 let buffers;
 let red, blue;
 let pg; 
-let z = 10;
+let z = -300;
 
 function preload() {
   red =  loadImage("red.png");
@@ -20,7 +20,7 @@ function setup() {
     cameraPos = createVector(w/2,h/2,0);
     cameraCenter = createVector(w/2, h/2, 0)
     
-    append(boxes, createVector(cameraCenter.x, cameraCenter.y, cameraCenter.z));
+    boxes.push(new Box(cameraCenter.x, cameraCenter.y, cameraCenter.z));
   
     
     capture = createCapture({
@@ -38,7 +38,9 @@ function setup() {
     capture.hide();
     colorMode(HSB, 100)
     
-    for 
+
+    
+    
 }
 
 var trailPointsLength = 100;
@@ -68,7 +70,6 @@ function draw() {
     var sumPosition = createVector(0, 0);
     if (capture.pixels.length > 0) { // don't forget this!
 
-        keyPressed();
         
         var w = capture.width,
             h = capture.height;
@@ -109,19 +110,18 @@ function draw() {
     }
 
     
-     push();
-    translate(width,0);
-  scale(-1, 1);
-//   image(capture, 0, 0, w, h);
-
-  pop();
+    push();
+translate(width / -2, height / -2);
+scale(-1, 1);  // horizontal mirror
+//image(capture, -w, 0, w, h); // flip by drawing leftward
+pop();
    
 
     noStroke();
     fill(targetColor);
-    rect(20, 20, 40, 40);
+    rect(-300, -220, 40, 40);
     
-pop;
+pop();
     /*ellipse(sumPosition.x, sumPosition.y, 8, 8);
     noFill();
     stroke(targetColor);
@@ -130,23 +130,33 @@ pop;
     
     let speed = 0.001;
     let fourthDist = cameraCenter.dist(cameraPos) / 4.0;
+      let boxPosition;
+    
    
     
  for(let i = boxes.length-1; i >= 0; i--){
-        let boxPos =   createVector(boxes[i]);
-      let boxPosition =   createVector(random(w),random(h),z);
+      
+     /*boxPos =   createVector(boxes[i]);
+      
 
         boxPos = p5.Vector.lerp(boxPosition, cameraPos, speed);
         boxes[i]= boxPos; 
         
   
-    
+    */
+     while (boxes.length < 5) {
+  let boxPosition = createVector(random(-w/8,w/8), random(-h/8,h/8), random(z,z-100));
+  boxes.push(new Box(boxPosition.x, boxPosition.y, boxPosition.z));
+}
+     for (let i = boxes.length - 1; i >= 0; i--) {
+  
+
     //float c = map(i,boxes.size(),0,0,255);
-    let c = map(boxPos.x, cameraCenter.x, cameraPos.x-100, 0,255);
-    tint(c);
+    //let c = map(boxPos.x, cameraCenter.x, cameraPos.x-100, 0,255);
+    //tint(c);
     
     //drawBox(boxPos);
-     orbitControl();
+     //orbitControl();
        
  /*  let d = boxPos.dist(cameraCenter);
     if (i == boxes.length - 1 && d >= fourthDist) {
@@ -160,14 +170,16 @@ pop;
     
     
    */  
-    if (boxPos.dist(cameraPos) < 100) {
-      boxes.remove(i);
-    }
-    
+   if (boxes[i].pos.z > cameraPos.z +300) {
+  boxes.splice(i, 1);
+}
   
  } 
-  
-    
+   for (let b of boxes){
+    b.display();
+    b.move();   
+   }
+}
 }
 
 function keyPressed(){
@@ -184,7 +196,7 @@ function drawBox(pos){
 
    let w = width/1.2;
    let h = height;
-     orbitControl();
+   //  orbitControl();
 
 
   push();
@@ -193,7 +205,7 @@ function drawBox(pos){
     
     stroke(255);
     fill(255);
-  box(30, 50, 10);
+  box(w, h, 10);
 
   /*beginShape();
   vertex(0, h, -w/2, 0, 0);
@@ -206,19 +218,22 @@ function drawBox(pos){
 
 class Box {
   constructor(x, y, z) {  
-    this.x = x;
-    this.y = y;
-    this.z = z;
+  this.pos = createVector(x, y, z);
   }
+  
     
   display(){
+    push();
+    translate(this.pos.x, this.pos.y, this.pos.z);
     stroke(255);
     fill(255);
-    box(this.x, this.y, this.z);
+    box(30, 50, 10);
+    pop();
+
   }
     
   move(){
-     z+=1;
+     this.pos.z+=.5;
   }
   
 }
