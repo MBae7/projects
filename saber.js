@@ -7,14 +7,10 @@ let cameraPos;
 let cameraCenter;
 let boxes = [];
 let buffers;
-let red, blue;
 let pg; 
 let z = -300;
+let sampling = false;
 
-function preload() {
-  red =  loadImage("red.png");
-  blue = loadImage("blue.png");
-}
 
 function setup() {
     cameraPos = createVector(w/2,h/2,0);
@@ -36,20 +32,21 @@ function setup() {
     capture.size(w, h);
     createCanvas(w, h, WEBGL);
     capture.hide();
-    colorMode(HSB, 100)
+   // colorMode(HSB, 100);
     
 
     
     
 }
 
-var trailPointsLength = 100;
+var trailPointsLength = 30;
 var trailPoints = [];
 function drawTrail(nextPoint) {
     trailPoints.push(nextPoint);
     if (trailPoints.length > trailPointsLength) {
         trailPoints.shift();
     }
+    noFill();
     beginShape();
     trailPoints.forEach(function (point) {
         vertex(point.x, point.y);
@@ -62,12 +59,14 @@ var targetColor = [255, 255, 255];
 
 function draw() {
    background(0);
+  
     
     push();
     
     capture.loadPixels();
     var sampling = false;
     var sumPosition = createVector(0, 0);
+    var sumPositionCopy = createVector(0,0);
     if (capture.pixels.length > 0) { // don't forget this!
 
         
@@ -98,35 +97,27 @@ function draw() {
                 i++; // skip alpha
             }
         }
-
-        sumPosition.div(total);
-
-        var n = w * h;
-        var ratio = total / n;
-        //select('#percentWhite').elt.innerText = int(100 * ratio);
+if (total > 0) {
+    sumPosition.div(total);
+    sumPositionCopy=sumPosition.copy();
+    sumPositionCopy.x = w - sumPosition.x; //flip
+} else {
+    sumPosition.set(0, 0); // or another fallback
+}
+    
     }
     if (!sampling) {
         capture.updatePixels();
     }
 
     
-    push();
-translate(width / -2, height / -2);
-scale(-1, 1);  // horizontal mirror
-//image(capture, -w, 0, w, h); // flip by drawing leftward
-pop();
+    
    
 
-    noStroke();
-    fill(targetColor);
-    rect(-300, -220, 40, 40);
     
-pop();
-    /*ellipse(sumPosition.x, sumPosition.y, 8, 8);
-    noFill();
-    stroke(targetColor);
-    strokeWeight(8);
-    drawTrail(sumPosition);*/
+    
+
+    
     
     let speed = 0.001;
     let fourthDist = cameraCenter.dist(cameraPos) / 4.0;
@@ -135,42 +126,15 @@ pop();
    
     
  for(let i = boxes.length-1; i >= 0; i--){
-      
-     /*boxPos =   createVector(boxes[i]);
-      
-
-        boxPos = p5.Vector.lerp(boxPosition, cameraPos, speed);
-        boxes[i]= boxPos; 
-        
-  
-    */
-     while (boxes.length < 5) {
+  while (boxes.length < 5) {
   let boxPosition = createVector(random(-w/8,w/8), random(-h/8,h/8), random(z,z-100));
   boxes.push(new Box(boxPosition.x, boxPosition.y, boxPosition.z));
 }
      for (let i = boxes.length - 1; i >= 0; i--) {
-  
 
-    //float c = map(i,boxes.size(),0,0,255);
-    //let c = map(boxPos.x, cameraCenter.x, cameraPos.x-100, 0,255);
-    //tint(c);
     
-    //drawBox(boxPos);
-     //orbitControl();
-       
- /*  let d = boxPos.dist(cameraCenter);
-    if (i == boxes.length - 1 && d >= fourthDist) {
-      boxes.add(createVector(cameraCenter.x, cameraCenter.y, cameraCenter.z));
-     // PGraphics pg = createGraphics(width/3,height/3);
-     // buffers.add(pg);
-      
-     // drawTrees(pg);
-    }
-        
-    
-    
-   */  
-   if (boxes[i].pos.z > cameraPos.z +300) {
+     
+   if (boxes[i].pos.z > cameraPos.z +500) {
   boxes.splice(i, 1);
 }
   
@@ -179,10 +143,58 @@ pop();
     b.display();
     b.move();   
    }
+     
 }
+    push();
+  resetMatrix(); // Reset transformations to 2D screen space
+  ortho(); 
+  rectMode(CENTER);
+
+  strokeWeight(5);
+  stroke(255);
+  noFill();
+  rect(0, 0, w/8, h/8); 
+  
+  line(-x,h,-w/16,h/16);
+  line(-x,-h,-w/16,-h/16);
+  line(x,-h,w/16,-h/16);
+  line(x,h,w/16,h/16);
+
+ if(mouseIsPressed){
+      push();
+translate(width / -2, height / -2);
+scale(-1, 1);  // horizontal mirror
+image(capture, -w, 0, w, h); // flip by drawing leftward
+pop();
+}
+    
+    noStroke();
+    fill(targetColor);
+    rect(-300, -220, 40, 40);
+    
+
+    
+  pop();
+    
+push();
+    resetMatrix;
+    ortho();
+    //scale(1,-1);
+    translate(-width/2, -height/2)
+    ellipse(-sumPosition.x, sumPosition.y, 8, 8);
+    //noFill();
+    stroke(targetColor);
+    strokeWeight(10);
+    if(sumPositionCopy.x!=0 && sumPositionCopy.y!=0){
+        drawTrail(sumPositionCopy);
+    }
+    
+pop();
+
 }
 
 function keyPressed(){
+   
     if(key === ' '&& keyIsPressed){
         if (mouseX > 0 && mouseX < width &&
             mouseY > 0 && mouseY < height) {
@@ -191,6 +203,8 @@ function keyPressed(){
         }
     }
 }
+
+
 
 function drawBox(pos){
 
@@ -207,13 +221,6 @@ function drawBox(pos){
     fill(255);
   box(w, h, 10);
 
-  /*beginShape();
-  vertex(0, h, -w/2, 0, 0);
-  vertex(0, h, w/2, 1, 0);
-  vertex(0, h/2, w/2, 1, 1);
-  vertex(0, h/2, -w/2, 0, 1);
-  endShape(CLOSE);
-  */
 }
 
 class Box {
@@ -225,9 +232,9 @@ class Box {
   display(){
     push();
     translate(this.pos.x, this.pos.y, this.pos.z);
-    stroke(255);
+    stroke(50);
     fill(255);
-    box(30, 50, 10);
+    box(20, 20, 20);
     pop();
 
   }
