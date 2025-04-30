@@ -10,6 +10,7 @@ let buffers;
 let pg; 
 let z = -300;
 let sampling = false;
+let s = 20;
 
 
 function setup() {
@@ -110,41 +111,30 @@ if (total > 0) {
         capture.updatePixels();
     }
 
-    
-    
    
-
-    
-    
-
-    
-    
     let speed = 0.001;
     let fourthDist = cameraCenter.dist(cameraPos) / 4.0;
-      let boxPosition;
+    let boxPosition;
     
    
     
- for(let i = boxes.length-1; i >= 0; i--){
-  while (boxes.length < 5) {
-  let boxPosition = createVector(random(-w/8,w/8), random(-h/8,h/8), random(z,z-100));
+ while (boxes.length < 5) {
+  let boxPosition = createVector(random(-w/8, w/8), random(-h/8, h/8), random(z, z - 100));
   boxes.push(new Box(boxPosition.x, boxPosition.y, boxPosition.z));
 }
-     for (let i = boxes.length - 1; i >= 0; i--) {
-
-    
      
-   if (boxes[i].pos.z > cameraPos.z +500) {
-  boxes.splice(i, 1);
-}
-  
- } 
+ for (let i = boxes.length - 1; i >= 0; i--) {
+  boxes[i].collision(sumPositionCopy); 
+  if (boxes[i].pos.z > cameraPos.z + 500 || boxes[i].hit) {
+    boxes.splice(i, 1);
+  }
+} 
    for (let b of boxes){
     b.display();
-    b.move();   
+    b.move(); 
    }
      
-}
+
     push();
   resetMatrix(); // Reset transformations to 2D screen space
   ortho(); 
@@ -177,7 +167,7 @@ pop();
   pop();
     
 push();
-    resetMatrix;
+    resetMatrix();
     ortho();
     //scale(1,-1);
     translate(-width/2, -height/2)
@@ -224,8 +214,10 @@ function drawBox(pos){
 }
 
 class Box {
+
   constructor(x, y, z) {  
   this.pos = createVector(x, y, z);
+  this.hit = false;
   }
   
     
@@ -234,7 +226,7 @@ class Box {
     translate(this.pos.x, this.pos.y, this.pos.z);
     stroke(50);
     fill(255);
-    box(20, 20, 20);
+    box(s, s, s);
     pop();
 
   }
@@ -242,6 +234,18 @@ class Box {
   move(){
      this.pos.z+=.5;
   }
+    
+  collision(trailPos){
+      let trail3D = createVector(trailPos.x - width / 2, trailPos.y - height / 2, 0);
+      let dx = this.pos.x - trail3D.x;
+  let dy = this.pos.y - trail3D.y;
+  let distXY = Math.sqrt(dx * dx + dy * dy);
+  
+  if (distXY < s / 2) {
+    this.hit = true;
+
+  }
+}
   
 }
     
