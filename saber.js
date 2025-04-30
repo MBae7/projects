@@ -99,7 +99,7 @@ function draw() {
             }
         }
 if (total > 0) {
-    sumPosition.div(total);
+   // sumPosition.div(total);
     sumPositionCopy=sumPosition.copy();
     sumPositionCopy.x = w - sumPosition.x; //flip
 } else {
@@ -232,11 +232,11 @@ class Box {
   }
     
   move(){
-     this.pos.z+=.5;
+     this.pos.z+=2;
   }
     
   collision(trailPos){
-      let trail3D = createVector(trailPos.x - width / 2, trailPos.y - height / 2, 0);
+      let trail3D = createVector(trailPos.x - width / 2, trailPos.y - height / 2, this.pos.z);
       let dx = this.pos.x - trail3D.x;
   let dy = this.pos.y - trail3D.y;
   let distXY = Math.sqrt(dx * dx + dy * dy);
