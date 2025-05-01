@@ -24,7 +24,7 @@ function preload() {
 
 function setup() {
     score = 0;
-    lives = 5;
+    lives = 10;
     count = lives;
     cameraPos = createVector(w/2,h/2,0);
     cameraCenter = createVector(w/2, h/2, 0)
