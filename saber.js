@@ -13,13 +13,19 @@ let sampling = false;
 let s = 20;
 var score;
 let font;
+var lives;
+var count;
+let music;
 
 function preload() {
   font = loadFont('assets/Oswald-VariableFont_wght.ttf');
+  music = loadSound('assets/music.mp3');
 }
 
 function setup() {
     score = 0;
+    lives = 5;
+    count = lives;
     cameraPos = createVector(w/2,h/2,0);
     cameraCenter = createVector(w/2, h/2, 0)
     
@@ -39,11 +45,12 @@ function setup() {
     capture.size(w, h);
     createCanvas(w, h, WEBGL);
     capture.hide();
-   // colorMode(HSB, 100);
+   
     textFont(font);
   textSize(32);
-
     
+
+      state = "START";
     
 }
 
@@ -67,8 +74,44 @@ var targetColor = [255, 255, 255];
 
 function draw() {
    background(0);
-  
     
+    if (state == "START") {
+        drawStart();
+     } else if (state == "GAME") {
+        drawGame();
+     } else if (state == "TUTORIAL") {
+        drawTutorial();
+     } else if (state == "END") {
+        drawEnd();
+      //  resetGame();
+     }else if (state == "RESET"){
+         drawReset();
+     }
+  
+}
+
+function drawStart(){
+    background(0);
+
+    push();
+    resetMatrix(); 
+    ortho();     
+
+    fill(255);
+    textAlign(CENTER, CENTER); 
+    textSize(50);
+    text("BEAT SABER(ish)", 0, -50); 
+    
+    textSize(20);
+    text("Press any key to start", 0, 0);
+
+    pop();
+}
+
+function drawGame(){
+    if (!music.isPlaying()) {
+        music.loop();
+    }
     push();
     
     capture.loadPixels();
@@ -125,14 +168,17 @@ if (total > 0) {
     
    
     
- while (boxes.length < 5) {
+ while (boxes.length < 7) {
   let boxPosition = createVector(random(-w/8, w/8), random(-h/8, h/8), random(z, z - 100));
   boxes.push(new Box(boxPosition.x, boxPosition.y, boxPosition.z));
 }
      
  for (let i = boxes.length - 1; i >= 0; i--) {
   boxes[i].collision(sumPositionCopy); 
-  if (boxes[i].pos.z > cameraPos.z + 500 || boxes[i].hit) {
+  if (boxes[i].pos.z > cameraPos.z + 400) {
+    count--;
+    boxes.splice(i, 1);
+  }if (boxes[i].hit) {
     boxes.splice(i, 1);
   }
 } 
@@ -192,23 +238,61 @@ pop();
     push();
 resetMatrix();
 ortho();
-translate(-width / 2, -height / 2);  // Shift to top-left origin
+translate(-width / 2, -height / 2); 
 fill(255);
 noStroke();
 textAlign(LEFT, TOP);
-text("score: " + score, 60, 5);  // 20px from top-left corner
+text("score: " + score, 60, 5); 
+text("lives left: " + count, 3*width/4, 5); 
 pop();
 
+    
+if(count<=0){
+    state = "END";
+ }
+}
+
+
+function drawEnd(){
+   background(0);
+
+    push();
+    resetMatrix(); 
+    ortho();     
+
+    fill(255);
+    textAlign(CENTER, CENTER); 
+    textSize(50);
+    text("GAME OVER", 0, -50); 
+
+    textSize(20);
+    text("SCORE: "+score, 0, 50);
+    
+    textSize(20);
+    text("Press any key to go back to start", 0, 0);
+    
+
+    pop(); 
+    if (music.isPlaying()) {
+        music.stop();
+    }
 }
 
 function keyPressed(){
+    if(state == "START"){
+        state = "GAME";
+    }
    
-    if(key === ' '&& keyIsPressed){
+    if(state == "GAME" && key === ' '&& keyIsPressed){
         if (mouseX > 0 && mouseX < width &&
             mouseY > 0 && mouseY < height) {
             targetColor = capture.get(map(mouseX,0,width,width,0), mouseY);
             sampling = true;
         }
+        count = lives;
+    }
+    if(state == "END"){
+        state = "RESET";
     }
 }
 
@@ -229,6 +313,13 @@ function drawBox(pos){
     fill(255);
   box(w, h, 10);
 
+}
+
+function drawReset(){
+    score =0;
+    count = lives;
+    
+    state = "START";
 }
 
 class Box {
@@ -259,12 +350,13 @@ class Box {
   let dy = this.pos.y - trail3D.y;
   let distXY = Math.sqrt(dx * dx + dy * dy);
       
-  let zScale = map(this.pos.z, -500, 500, 0.5, 6); 
+  let zScale = map(this.pos.z, 100, 500, 0.01, 10); 
   let adjustedS = s * zScale;
   
-  if (distXY < adjustedS / 2) {
+  if (distXY < adjustedS / 2 && this.pos.z>0) {
     this.hit = true;
     score++;
+
 
   }
 }
