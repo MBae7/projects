@@ -11,9 +11,15 @@ let pg;
 let z = -300;
 let sampling = false;
 let s = 20;
+var score;
+let font;
 
+function preload() {
+  font = loadFont('assets/Oswald-VariableFont_wght.ttf');
+}
 
 function setup() {
+    score = 0;
     cameraPos = createVector(w/2,h/2,0);
     cameraCenter = createVector(w/2, h/2, 0)
     
@@ -34,7 +40,8 @@ function setup() {
     createCanvas(w, h, WEBGL);
     capture.hide();
    // colorMode(HSB, 100);
-    
+    textFont(font);
+  textSize(32);
 
     
     
@@ -99,7 +106,7 @@ function draw() {
             }
         }
 if (total > 0) {
-   // sumPosition.div(total);
+   sumPosition.div(total);
     sumPositionCopy=sumPosition.copy();
     sumPositionCopy.x = w - sumPosition.x; //flip
 } else {
@@ -179,6 +186,17 @@ push();
         drawTrail(sumPositionCopy);
     }
     
+    
+pop();
+    
+    push();
+resetMatrix();
+ortho();
+translate(-width / 2, -height / 2);  // Shift to top-left origin
+fill(255);
+noStroke();
+textAlign(LEFT, TOP);
+text("score: " + score, 60, 5);  // 20px from top-left corner
 pop();
 
 }
@@ -232,7 +250,7 @@ class Box {
   }
     
   move(){
-     this.pos.z+=2;
+     this.pos.z+=4;
   }
     
   collision(trailPos){
@@ -240,9 +258,13 @@ class Box {
       let dx = this.pos.x - trail3D.x;
   let dy = this.pos.y - trail3D.y;
   let distXY = Math.sqrt(dx * dx + dy * dy);
+      
+  let zScale = map(this.pos.z, -500, 500, 0.5, 6); 
+  let adjustedS = s * zScale;
   
-  if (distXY < s / 2) {
+  if (distXY < adjustedS / 2) {
     this.hit = true;
+    score++;
 
   }
 }
