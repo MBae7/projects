@@ -1,8 +1,8 @@
 // https://kylemcdonald.github.io/cv-examples/
 
 var capture;
-var w = 640;
-var h = 480;
+var w = 960;
+var h = 720;
 let cameraPos;
 let cameraCenter;
 let boxes = [];
@@ -175,7 +175,7 @@ if (total > 0) {
      
  for (let i = boxes.length - 1; i >= 0; i--) {
   boxes[i].collision(sumPositionCopy); 
-  if (boxes[i].pos.z > cameraPos.z + 400) {
+  if (boxes[i].pos.z > cameraPos.z + 800) {
     count--;
     boxes.splice(i, 1);
   }if (boxes[i].hit) {
@@ -213,7 +213,7 @@ pop();
     
     noStroke();
     fill(targetColor);
-    rect(-300, -220, 40, 40);
+    rect(-450, -330, 40, 40);
     
 
     
